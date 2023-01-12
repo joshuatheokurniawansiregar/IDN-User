@@ -1,33 +1,63 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { SubTopicTopNav } from "../layout/SubTopicTopNav";
 
 export function TopicHome() {
     const [news, setNews] = useState([])
     const { topic_slug_url } = useParams();
-    const [topicSlug, setTopicSlug] = ("");
+    const [topicSlug, setTopicSlug] = useState("");
+    const [timeOutMounted, setTimeOutMounted] = useState(true);
     async function getNews() {
         await axios.get("http://127.0.0.1:8000/api/news/topics/" + topic_slug_url).then(response => {
             response.data.forEach(list => {
+                // const { topic_slug } = list;
                 setNews(list.news);
-                const { topic_slug } = list;
-                setTopicSlug(topic_slug);
+                // setTopicSlug(topic_slug);
             });
+        });
+    }
+    function orderByDate(news) {
+        const orderbydate = document.querySelectorAll(".order-by-date");
+        let sorted = null;
+
+        for (let i = 0; i < orderbydate.length; i++) {
+            orderbydate[i].addEventListener("change", function (param) {
+                if (param.target) {
+                    if (param.target.value == "oldest") {
+                        sorted = news.sort((a, b) => b.added_at - a.added_at);
+                    }
+                    if (param.target.value == "newest") {
+                        sorted = news.sort((a, b) => a.added_at - b.added_at);
+                    }
+                    setNews(sorted);
+                }
+            })
+        }
+    }
+    function resetButton(news) {
+        document.getElementById("reset-button").addEventListener("click", function () {
+            let sorted = news.sort((a, b) => b.id - a.id);
+            setNews(sorted);
+            document.getElementsByName("order_by").forEach(i => i.checked = false);
         });
     }
     useEffect(() => {
         getNews();
     }, []);
+    useEffect(() => {
+        orderByDate(news);
+        resetButton(news);
+    })
+
     return (
         <>
             <div className="container mt-3">
                 <label htmlFor="oldest" className="display-block">
-                    <input type="radio" id="oldest" name="order_by" /> Oldest</label>
+                    <input type="radio" value="oldest" name="order_by" className="order-by-date" /> Oldest</label>
                 <label htmlFor="newest" className="display-block">
-                    <input type="radio" id="newest" name="order_by" /> Newest
+                    <input type="radio" value="newest" name="order_by" className="order-by-date" /> Newest
                 </label>
-                <button className="btn btn-danger mb-2" onClick={() => document.getElementsByName("order_by").forEach(i => i.checked = false)}>Reset</button>
+                <button className="btn btn-danger mb-2" id="reset-button">Reset</button>
                 <div className="row">
                     {
                         news.map(data => {
