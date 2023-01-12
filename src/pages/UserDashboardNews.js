@@ -540,34 +540,22 @@ export function CreateAuthorAccountForm() {
         setIsImageSelected(true);
     }
 
-    useEffect(() => {
-        setTimeout(() => {
-            setIsCanceled(false);
-        }, 0.1);
-        let mounted = true;
+    async function getPreviousSavedImage() {
         const userdata = window.localStorage.getItem("user");
         const userdataobject = JSON.parse(userdata);
-        async function getPreviousSavedImage() {
-            let imagename = await axios.get("http://127.0.0.1:8000/api/userprofile/" + userdataobject["user"]);
-            let imageUrl = await axios({
-                url: "http://127.0.0.1:8000/api/userprofile/photo_profile/" + userdataobject["user"],
-                method: "GET",
-                responseType: "blob",
-            });
-            let imageData = imageUrl.data;
-            let type = imageData.type;
-            let uploadedFile = new File([imageData], imagename.data.author[0]["photo_profile_name"], { type: type });
-            if (mounted) {
-                setSavedImage(uploadedFile);
-            }
-        }
-        if (isCanceled == false) {
-            return () => {
-                mounted = false;
-            }
-        }
-        getPreviousSavedImage();
-    }, [isCanceled, savedImage]);
+        let imagename = await axios.get("http://127.0.0.1:8000/api/userprofile/" + userdataobject["user"]);
+        let imageUrl = await axios({
+            url: "http://127.0.0.1:8000/api/userprofile/photo_profile/" + userdataobject["user"],
+            method: "GET",
+            responseType: "blob",
+        });
+        let imageData = imageUrl.data;
+        let type = imageData.type;
+        let uploadedFile = new File([imageData], imagename.data.author[0]["photo_profile_name"], { type: type });
+        // if (mounted) {
+        setSavedImage(uploadedFile);
+        // }
+    }
 
     async function PreviousPhotoProfile() {
         const userdata = window.localStorage.getItem("user");
@@ -581,6 +569,7 @@ export function CreateAuthorAccountForm() {
         let imageData = imageUrl.data;
         let type = imageData.type;
         let uploadedFile = new File([imageData], imagename.data.author[0]["photo_profile_name"], { type: type });
+        console.log(uploadedFile);
         document.querySelector("#image-preview-parent").style.display = "none";
         const image_preview_result = document.querySelector("#image-preview-result");
         image_preview_result.style.display = "block";
@@ -615,12 +604,12 @@ export function CreateAuthorAccountForm() {
             fileReader.readAsDataURL(savedImage);
         }
         if (isimageselected == true) ShowImagePreviewAfterSelectImage();
-        if (isimageselected == false) PreviousPhotoProfile();
+        if (isimageselected == false) {
+            PreviousPhotoProfile()
+            getPreviousSavedImage();
+        };
 
-        if (mounted) {
-
-        }
-    });
+    }, []);
     const userSubmit = async (e) => {
         e.preventDefault();
         const userdata = window.localStorage.getItem("user");
@@ -671,7 +660,7 @@ export function CreateAuthorAccountForm() {
                     <div className="mb-3 mt-3 row">
                         <label htmlFor='description' className="col-sm-2 mt-5 col-form-label">Author Description</label>
                         <div className="col-sm-8 mt-4 d-flex flex-column align-items-start">
-                            <textarea type="text" className="form-control" value={userDescription} onChange={(e) => { setUserDescription(e.target.value) }} id="description" rows="5" cols="1"></textarea>
+                            <textarea type="text" className="form-control" value={userDescription} onChange={(e) => setUserDescription(e.target.value)} id="description" rows="5" cols="1"></textarea>
                             <ul className="mr-5 mt-2">
                                 {authorValidationErrorMessages["author_description"] && <li className="text-danger">{authorValidationErrorMessages["author_description"][0]}</li>}
                             </ul>

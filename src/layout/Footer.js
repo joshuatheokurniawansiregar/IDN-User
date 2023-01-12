@@ -1,6 +1,23 @@
 import { Link } from "react-router-dom";
 import { News } from "../services/json_dummy";
-export default function Footer() {
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+export function Footer() {
+    const [topics, setTopics] = useState([]);
+    const [subTopics, setSubTopics] = useState([]);
+    useEffect(() => {
+        getTopics();
+        getSubTopics();
+    }, []);
+    const getTopics = async () => {
+        const response = await axios.get("http://127.0.0.1:8000/api/topics");
+        setTopics(response.data.topics);
+    }
+    const getSubTopics = async () => {
+        const response = await axios.get("http://127.0.0.1:8000/api/sub_topics");
+        setSubTopics(response.data.sub_topics);
+    }
     return (
         <>
             <div className="container-fluid bg-dark text-light mt-3" style={{
@@ -28,10 +45,10 @@ export default function Footer() {
                             }}>
                                 <ul className="nav flex-column">
                                     {
-                                        News.map((data, key) => {
+                                        topics.map((data, key) => {
                                             return (
                                                 <li className="nav-item mb-2" key={key}>
-                                                    <Link className="nav-link text-light fit-content" to="#">{data.topic}</Link>
+                                                    <a className="nav-link text-light fit-content" href={`${data.topic_slug}`}>{data.topic_title}</a>
                                                 </li>
                                             )
                                         })
@@ -48,10 +65,10 @@ export default function Footer() {
                             }}>
                                 <ul className="nav flex-column">
                                     {
-                                        News.map((data, key) => {
+                                        subTopics.map((data, key) => {
                                             return (
                                                 <li className="nav-item mb-2" key={key}>
-                                                    <Link className="nav-link text-light fit-content" to="#">{data.topic}</Link>
+                                                    <a className="nav-link text-light fit-content" href={`${data.topic_slug}/${data.sub_topic_slug}`}>{data.sub_topic_title}</a>
                                                 </li>
                                             )
                                         })

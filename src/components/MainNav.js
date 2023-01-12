@@ -8,7 +8,7 @@ import { UserProfile } from '../pages/UserProfile';
 import { UpdateUserProfile } from '../pages/UpdateUserProfile';
 import { AuthorNews, CreateAuthorAccountForm, CreateNewsForm, AuthorUpdateNewsPage, AuthorDashboardOpenedNews } from '../pages/UserDashboardNews';
 import { SideNavBar } from '../layout/SideNavBar';
-import Footer from '../layout/Footer';
+import { Footer } from '../layout/Footer';
 import { UserDashboardCreateAuthorReceivingAccount, UserDashboardAuthorReceivingAccount } from '../pages/UserDashboardAuthorReceivingAccount';
 import { History } from '../pages/UserDashboardHistory';
 import { NavLinks } from './NavLinks';
@@ -19,10 +19,10 @@ export function MainComp() {
         <>
             <NavLinks />
             <Routes>
-                <Route path='/' element={<><Home /><Footer /></>} />
-                <Route path='/:topic_slug_url/*' element={<><TopicSubTopicNavigation /><Footer /></>} />
-                <Route path='/signup' element={<><SignUp /><Footer /></>} />
-                <Route path='/signin' element={<><SignIn /><Footer /></>} />
+                <Route path='/' element={<><Home /></>} />
+                <Route path='/:topic_slug_url/*' element={<><TopicSubTopicNavigation /></>} />
+                <Route path='/signup' element={<><SignUp /></>} />
+                <Route path='/signin' element={<><SignIn /></>} />
                 <Route path='/forgetpassword' element={<ForgotPassword />} />
                 <Route path='/news' element={<ForgotPassword />} />
                 <Route path='/news/search/:keywordparam' element={<SearchNewsPage />} />
@@ -38,6 +38,7 @@ export function MainComp() {
                 <Route path='/userdashboard/authoraccountbalance/' element={<><SideNavBar /><UserDashboardAuthorReceivingAccount /></>} />
                 <Route path='/userdashboard/authoraccountbalance/createaccountbalance' element={<><SideNavBar /><UserDashboardCreateAuthorReceivingAccount /></>} />
             </Routes>
+            <Footer />
         </>
     )
 }

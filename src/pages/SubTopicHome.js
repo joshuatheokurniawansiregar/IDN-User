@@ -34,9 +34,9 @@ export function SubTopic(props) {
                                             maxWidth: "100%",
                                             height: "150px"
                                         }} src={data.news_picture_link} />
-                                        <div>
-                                            <h4 className='card-title'>{data.news_title}</h4>
-                                            <div className="card-text">{data.news_content}</div>
+                                        <div style={{ overflowY: "hidden", padding: "5px" }}>
+                                            <h4 className='card-title'><a style={{ textDecoration: "none", color: "black" }} href={data.topic_slug + "/" + data.sub_topic_slug}>{data.news_title}</a></h4>
+                                            <div className="card-text" style={{ textAlign: "justify" }}>{data.news_content.substring(0, 150)}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -45,7 +45,7 @@ export function SubTopic(props) {
                     }
                 </div>
                 <div className="text-center">
-                    <button className="btn btn-success mb-2"> Load More Test</button>
+                    <button className="btn btn-success mb-2"> Load More</button>
                 </div>
             </div>
         </>

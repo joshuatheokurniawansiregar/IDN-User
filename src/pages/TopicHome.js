@@ -38,9 +38,9 @@ export function TopicHome() {
                                             maxWidth: "100%",
                                             height: "150px"
                                         }} src={data.news_picture_link} />
-                                        <div>
-                                            <h4 className='card-title'><a href={"/" + topic_slug_url + "/" + data.sub_topic_slug + "/readnews/" + data.news_slug}>{data.news_title}</a></h4>
-                                            <div className="card-text">{data.news_content}</div>
+                                        <div style={{ overflowY: "hidden", padding: "5px" }}>
+                                            <h4 className='card-title' style={{ fontSize: "1em" }}><a style={{ color: "black", textDecoration: "none" }} href={"/" + topic_slug_url + "/" + data.sub_topic_slug + "/readnews/" + data.news_slug}>{data.news_title}</a></h4>
+                                            <div className="card-text" style={{ textAlign: "justify" }} >{data.news_content.substring(0, 150)}</div>
                                         </div>
                                     </div>
                                 </div>

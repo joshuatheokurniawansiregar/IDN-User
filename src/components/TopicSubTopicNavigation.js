@@ -12,7 +12,7 @@ export function TopicSubTopicNavigation() {
             <SubTopicTopNav />
             <Routes>
                 <Route path='/' element={<TopicHome />} />
-                <Route path='/:sub_topic_slug/' render={(routerProps) => (<SubTopic {...routerProps} />)} element={<SubTopic />} />
+                <Route path='/:sub_topic_slug/' element={<SubTopic />} />
                 <Route path='/:sub_topic_slug/readnews/:news_slug_url' element={<><ReadNewsPage /></>} />
             </Routes>
         </>

@@ -9,7 +9,9 @@ const SearchNewsPage = () => {
     const [news, setNews] = useState();
     useEffect(() => {
         async function getNews() {
-            await axios.get("http://127.0.0.1/api/news/search_news/" + keywordparam.replace('%', '')).then(response => {
+            await axios.get("http://127.0.0.1:8000/api/news/search_news_by_newstitle", {
+                title_keyword: encodeURI(keywordparam)
+            }).then(response => {
                 console.log(response.data);
             });
         }
@@ -20,7 +22,7 @@ const SearchNewsPage = () => {
             <div className='container-fluid'>
                 <div className='row'>
                     <div className='col-sm-12'>
-
+                        <h1>Test</h1>
                     </div>
                 </div>
             </div>

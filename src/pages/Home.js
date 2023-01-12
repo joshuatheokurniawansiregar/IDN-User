@@ -7,19 +7,38 @@ import { useLocation } from 'react-router-dom';
 export default function Home() {
     const [topicData, setTopics] = useState([]);
     const [newsData, setNews] = useState([]);
+    const [testNewsData, setTestNewsData] = useState([]);
     const location = useLocation();
     const path = location.pathname;
-    useEffect(() => {
-        fetchNews();
-    }, []);
     const fetchNews = async () => {
-        axios.get("http://127.0.0.1:8000/api/news/topics").
+        await axios.get("http://127.0.0.1:8000/api/news/topics").
             then(response => {
-                const allNews = response.data;
-                console.group(allNews);
-                setNews(allNews);
+                setNews(response.data);
+                response.data.map(list_news_data => {
+                    const { news } = list_news_data;
+                    setTestNewsData(news);
+                    // console.log(news)
+                });
+
             });
     }
+    function loadMoreButtonClicked(e) {
+        const loadMoreButton = document.querySelectorAll(".load-more");
+        for (let i = 0; i < loadMoreButton.length; i++) {
+            loadMoreButton[i].addEventListener("click", function (e) {
+                // fetchNews();
+                // newsData.map(news_data => {
+                //     const { topic_slug, news } = news_data;
+                //     console.log(topic_slug);
+                // })
+                // console.log("test")
+            });
+        }
+    }
+    useEffect(() => {
+        fetchNews();
+        const loadMoreButton = document.querySelectorAll(".load-more");
+    }, []);
     return (
         <>
             <div className="container mt-3">
@@ -39,14 +58,14 @@ export default function Home() {
                                                             maxWidth: "100%",
                                                             height: "150px"
                                                         }} src={data.news_picture_link} />
-                                                        <p><a href={"/" + topic_slug + "/" + data.sub_topic_slug + "/readnews/" + data.news_slug}>{data.news_title}</a></p>
+                                                        <p><a style={{ textDecoration: "none", color: "black", fontWeight: "bold" }} href={"/" + topic_slug + "/" + data.sub_topic_slug + "/readnews/" + data.news_slug}>{data.news_title}</a></p>
                                                         <div style={{ height: "100px", overflowY: "auto" }}>{data.news_content}</div>
                                                     </div>
                                                 )
                                             })
                                         }
                                         <div className="text-center">
-                                            <button className="btn btn-success mb-2"> Load More </button>
+                                            <button className="btn btn-success mb-2 load-more" onClick={loadMoreButtonClicked}> Load More </button>
                                         </div>
                                     </>
                                 )

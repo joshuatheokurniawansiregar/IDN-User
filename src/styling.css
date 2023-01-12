@@ -200,13 +200,14 @@ li {
     display: flex;
     flex-direction: column;
     /* margin: 0 4px; */
-    width: 50%;
+    width: 20%;
 }
 
 .top-nav-search-area {
     height: 45px;
     width: 100%;
     display: flex;
+    flex-direction: row;
     background: white;
     border-radius: 5px;
 }
