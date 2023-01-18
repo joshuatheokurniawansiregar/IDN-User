@@ -3,38 +3,13 @@ import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
 
 import axios from 'axios';
 
-
-const SearchNewsPage = () => {
-    const { keywordparam } = useParams();
-    const [news, setNews] = useState();
-    useEffect(() => {
-        async function getNews() {
-            await axios.get("http://127.0.0.1:8000/api/news/search_news_by_newstitle", {
-                title_keyword: encodeURI(keywordparam)
-            }).then(response => {
-                console.log(response.data);
-            });
-        }
-        getNews();
-    });
-    return (
-        <>
-            <div className='container-fluid'>
-                <div className='row'>
-                    <div className='col-sm-12'>
-                        <h1>Test</h1>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
 const TopNavLayoutLoggedIn = () => {
     const [topics, setTopics] = useState([]);
     const { topic_slug } = useParams();
     const [user, setUser] = useState([]);
     const navigate = useNavigate();
     const [newsTitleSearch, setNewsTitleSearch] = useState("");
+    const [isSearchByNewsContentClicked, setIsSearchByNewsContentClicked] = useState(false);
     useEffect(() => {
         getTopics();
         getUserProfile();
@@ -49,6 +24,10 @@ const TopNavLayoutLoggedIn = () => {
         const response = await axios.get("http://127.0.0.1:8000/api/userprofile/" + userobject["user"]);
         setUser(response.data.author);
     }
+
+    // const searchButtonClicked = () => {
+    //     document.getElementById("")
+    // }
     const activeLink = ({ isActive }) => {
 
     }
@@ -62,11 +41,11 @@ const TopNavLayoutLoggedIn = () => {
             <ul className="top-navigation-bar">
                 <li className="top-nav-logo"><Link to="/"><img src="http://localhost:3006/res/logo.png" /></Link></li>
                 <li className="top-nav-members-container">
-                    <div className="top-nav-home"><NavLink to="/" className={activeLink} >Home</NavLink></div>
-                    <div className="top-nav-members top-nav-members">
-                        {topics.map((data, index) => {
+                    <div className="top-nav-members">
+                        <div className="top-nav-home"><NavLink to="/" >Home</NavLink></div>
+                        {topics.map((data) => {
                             return (
-                                <a key={index} className="top-nav-links" href={`/${data.topic_slug}`}>{data.topic_title}</a>
+                                <a className="top-nav-links" href={`${data.topic_slug}`}> {data.topic_title}</a>
                             )
                         })}
                     </div>
@@ -76,15 +55,26 @@ const TopNavLayoutLoggedIn = () => {
                         <input type="search" value={newsTitleSearch} onChange={(e) => { setNewsTitleSearch(e.target.value) }} placeholder='Search news...' />
                         <button onClick={(e) => {
                             e.preventDefault();
-                            window.location.replace("/news/search/" + newsTitleSearch);
+                            // if (isSearchByNewsContentClicked === true) {
+                            //     alert("true");
+                            // } else {
+                            //     alert("false");
+                            // }
+                            window.location.replace("newsbytitle/search/" + newsTitleSearch);
                         }}>Search</button>
                     </div>
                     <label htmlFor="news_content_radio" className="auto-specific">
-                        <input type="radio" id="news_content_radio" name="search_specific_news" /> Search By News Content
+                        <input type="radio" id="news_content_radio" name="search_specific_news" onChange={(e) => {
+                            e.preventDefault();
+                            // setIsSearchByNewsContentClicked(true);
+                        }} /> Search By News Content
                     </label>
                     <button className="btn-custom btn-red" onClick={() => {
                         const search_specific_news_radio = document.getElementsByName("search_specific_news");
-                        search_specific_news_radio.forEach(test1 => test1.checked = false)
+                        search_specific_news_radio.forEach(test1 => {
+                            test1.checked = false
+                            // setIsSearchByNewsContentClicked(false);
+                        })
                     }}>Clear Search 'By'</button>
                 </div>
                 <ul>
@@ -118,4 +108,4 @@ const TopNavLayoutLoggedIn = () => {
         </nav >
     )
 }
-export { TopNavLayoutLoggedIn, SearchNewsPage }
+export { TopNavLayoutLoggedIn }

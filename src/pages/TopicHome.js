@@ -1,20 +1,23 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 export function TopicHome() {
     const [news, setNews] = useState([])
     const { topic_slug_url } = useParams();
-    const [topicSlug, setTopicSlug] = useState("");
-    const [timeOutMounted, setTimeOutMounted] = useState(true);
+    const locationProps = useLocation();
     async function getNews() {
-        await axios.get("http://127.0.0.1:8000/api/news/topics/" + topic_slug_url).then(response => {
-            response.data.forEach(list => {
-                // const { topic_slug } = list;
-                setNews(list.news);
-                // setTopicSlug(topic_slug);
-            });
-        });
+        // await axios.get("http://127.0.0.1:8000/api/news/topics/" + topic_slug_url).then(response => {
+        //     response.data.forEach(list => {
+        //         // const { topic_slug } = list;
+        //         setNews(list.news);
+        //         // setTopicSlug(topic_slug);
+        //     });
+        // });
+        const allNews = locationProps.state;
+        const slice = locationProps.pathname.slice(1);
+        const filteredNews = allNews.data.filter(value => value.topic_slug === slice);
+        setNews(filteredNews);
     }
     function orderByDate(news) {
         const orderbydate = document.querySelectorAll(".order-by-date");
@@ -43,6 +46,7 @@ export function TopicHome() {
     }
     useEffect(() => {
         getNews();
+        console.log(locationProps.state)
     }, []);
     useEffect(() => {
         orderByDate(news);
@@ -79,7 +83,7 @@ export function TopicHome() {
                     }
                 </div>
                 <div className="text-center">
-                    <button className="btn btn-success mb-2"> Load More</button>
+                    {/* <button className="btn btn-success mb-2"> Load More</button> */}
                 </div>
             </div></>
     )

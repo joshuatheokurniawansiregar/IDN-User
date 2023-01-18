@@ -15,15 +15,16 @@ export function History() {
         const userobject = JSON.parse(userstorage);
         const response = await axios.get(`http://127.0.0.1:8000/api/history/${userobject["user"]}`);
         setHistory(response.data.history);
+        console.log(response.data.history);
         // console.log(response.data.history);
     }
     useEffect(() => {
         getHistory();
-    }, [page]);
+    }, []);
     useEffect(() => {
         window.addEventListener("scroll", scrollEvent);
         return () => window.removeEventListener("scroll", scrollEvent);
-    }, [page]);
+    }, []);
     return (
         <>
             <div className="userdashboard-main">

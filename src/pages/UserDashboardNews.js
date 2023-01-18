@@ -742,6 +742,7 @@ export function CreateNewsForm() {
         formData.append("news_content", newsContent);
         formData.append("image_file", uploadedImage);
         formData.append("sub_topic_id", subTopic);
+        console.log(formData.get("sub_topic_id"))
         await axios.post(`http://127.0.0.1:8000/api/adminapproval/news/${userdataobject["user"]}`, formData).then(response => {
             // console.log(response.data);
             window.location.replace("/userdashboard/news");

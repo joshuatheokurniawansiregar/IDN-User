@@ -47,13 +47,12 @@ export function UserDashboardCreateAuthorReceivingAccount() {
             if (error.response.status === 422) {
                 setAccountNumberErrorMessage(JSON.parse(error.response.data));
                 console.log(error.response.data);
-
             }
         });
     }
     return (
         <div className="userdashboard-main">
-            <div className="container-fluid">
+            <div className="container-fluid" style={{ height: "100vh" }}>
                 <form className="form-group w-75" style={{ position: "relative", left: "100px", top: "100px" }} onSubmit={Submit}>
                     <div className="mb-3 mt-3 row">
                         <label htmlFor='username' className="col-sm-2 col-form-label">Name</label>

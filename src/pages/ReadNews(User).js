@@ -13,6 +13,14 @@ export function ReadNewsPage() {
         getNews();
         getManyNews();
     }, []);
+    const SaveHistory = async () => {
+        // const localStorage = JSON.stringify(window.localStorage("user"));
+        // await axios.post("http://127.0.0.1:8000/api/history", {
+        //     news_id: 
+        // }).then(() => {
+
+        //     })
+    }
     const getNews = async () => {
         await axios.get("http://127.0.0.1:8000/api/news/open_news/" + news_slug_url).then(async (response) => {
             setNews(response.data.news);
